@@ -1,6 +1,4 @@
-import { assign, createMachine } from "xstate";
-
-enum gameStates {
+export enum gameStates {
   LOBBY = "LOBBY",
   PLAY = "PLAY",
   WIN = "WIN",
@@ -8,75 +6,43 @@ enum gameStates {
 }
 
 export type Token = 1 | 2 | null;
-type Grid = Token[][];
+export type Grid = Token[][];
 
-interface Context {
+export interface GameState {
   grid: Grid;
   currentPlayer: Token;
+  state: gameStates;
 }
 
-interface eventClick {
-  type: "click";
-  row: number;
-  column: number;
+let gameState: GameState = {
+  grid: Array(6)
+    .fill(null)
+    .map(() => Array(7).fill(null)) as Grid,
+  currentPlayer: 1,
+  state: gameStates.LOBBY,
+};
+
+export function handleClick(
+  row: number,
+  column: number,
+  gameState: GameState
+): GameState {
+  if (gameState.state !== gameStates.PLAY || gameState.grid[row][column]) {
+    return gameState;
+  }
+
+  const newGrid = gameState.grid.map((r) => [...r]);
+  newGrid[row][column] = gameState.currentPlayer;
+
+  const newGameState = {
+    ...gameState,
+    grid: newGrid,
+    currentPlayer: gameState.currentPlayer === 1 ? 2 : (1 as Token),
+  };
+
+  return newGameState;
 }
 
-export const machine = createMachine({
-  id: "game",
-  initial: gameStates.LOBBY,
-  context: {
-    grid: Array(6)
-      .fill(null)
-      .map(() => Array(7).fill(null)) as Grid,
-    currentPlayer: 1,
-  },
-  states: {
-    LOBBY: {
-      on: {
-        join: {
-          actions: ["joinGame"],
-          target: "LOBBY",
-        },
-        leave: {
-          actions: ["leaveGame"],
-          target: "LOBBY",
-        },
-        chooseColor: {
-          target: "LOBBY",
-          actions: ["chooseColor"],
-        },
-        start: {
-          target: "PLAY",
-          actions: ["setCurrentPlayer"],
-        },
-      },
-    },
-    PLAY: {
-      on: {
-        click: {
-          actions: assign((context, event) => {
-            const grid = [...context.grid];
-            grid[event.row][event.column] = context.currentPlayer;
-            return { ...context, grid };
-          }),
-        },
-      },
-    },
-    WIN: {
-      on: {
-        restart: {
-          target: "LOBBY",
-          actions: ["restart"],
-        },
-      },
-    },
-    DRAW: {
-      on: {
-        restart: {
-          target: "LOBBY",
-          actions: ["restart"],
-        },
-      },
-    },
-  },
-});
+export function startGame() {
+  gameState.state = gameStates.PLAY;
+}
