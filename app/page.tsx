@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Token, GameState, gameStates, handleClick } from "./machine/page";
+import { Token, GameState, gameStates, handleClick } from "../utils/page";
 
 export default function Home() {
   const [gameState, setGameState] = useState<GameState>({
