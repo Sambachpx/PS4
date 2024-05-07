@@ -22,17 +22,19 @@ let gameState: GameState = {
   state: gameStates.LOBBY,
 };
 
-export function handleClick(
-  row: number,
-  column: number,
-  gameState: GameState
-): GameState {
-  if (gameState.state !== gameStates.PLAY || gameState.grid[row][column]) {
+export function handleClick(column: number, gameState: GameState): GameState {
+  if (gameState.state !== gameStates.PLAY) {
     return gameState;
   }
 
-  const newGrid = gameState.grid.map((r) => [...r]);
-  newGrid[row][column] = gameState.currentPlayer;
+  const newGrid = gameState.grid.map((row) => [...row]);
+
+  for (let row = newGrid.length - 1; row >= 0; row--) {
+    if (newGrid[row][column] === null) {
+      newGrid[row][column] = gameState.currentPlayer;
+      break;
+    }
+  }
 
   const newGameState = {
     ...gameState,

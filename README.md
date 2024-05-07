@@ -1,6 +1,6 @@
 # Puissance 4 Samba
 
-L'objectif du projet est de créer un jeu de puissance 4 où 2 joueurs peuvent se défier en local
+L'objectif du projet est de créer un jeu de puissance 4 (hors lige) où 2 joueurs peuvent se défier en local
 
 ## Règles du P4
 
@@ -25,4 +25,6 @@ Pour le front-end, nous utilisons React, une librairie qui permet de mettre à j
 1. Clonez le dépôt : `git clone https://github.com/Sambachpx/PS4.git`
 2. Installez les dépendances : `npm install`
 3. Lancez le serveur : `npm run dev`
-   Accédez à `http://localhost:3000`
+4. Accédez à `http://localhost:3000`
+5. Entrez un pseudo pour le joueur 1 et un pseudo pour le joueur 2
+6. Jouez au Puissance 4 (en appuyant au préalable sur le bouton "Commencer à jouer" sinon la partie ne se lancera pas)
